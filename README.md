@@ -1,8 +1,8 @@
 # Meteorite landings on Planet Earth
 
-This is a demo project demonstrating how to setup a pipeline to build and use static vector tiles as described in the accompaning [blog post](https://www.monades.dev/).
+This is a demo project demonstrating how to setup a pipeline to build and use static vector tiles as described in the accompanying [blog post](https://www.monades.dev/).
 
-Check out the live demo [here](https://meteorites.netlify.app/)!
+Check out the live demo [here](https://meteorites.monades.dev/)!
 
 ## Setup
 
