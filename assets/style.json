@@ -1,0 +1,88 @@
+{
+  "version": 8,
+  "name": "Your Theme",
+  "sources": {
+    "tiles": {
+      "type": "vector",
+      "url": "tiles/metadata.json"
+    }
+  },
+  "glyphs": "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "#2E3440"
+      }
+    },
+    {
+      "id": "country-fills",
+      "source": "tiles",
+      "source-layer": "countries",
+      "type": "fill",
+      "paint": {
+        "fill-color": "#616E88"
+      }
+    },
+    {
+      "id": "state-borders",
+      "source": "tiles",
+      "source-layer": "states_provinces",
+      "type": "line",
+      "paint": {
+        "line-color": "#4C566A",
+        "line-width": 1
+      }
+    },
+    {
+      "id": "country-borders",
+      "source": "tiles",
+      "source-layer": "countries",
+      "type": "line",
+      "minzoom": 2,
+      "paint": {
+        "line-color": "#434C5E",
+        "line-width": 1
+      }
+    },
+    {
+      "id": "meteorites",
+      "source": "tiles",
+      "source-layer": "meteorites",
+      "type": "circle",
+      "paint": {
+        "circle-color": [
+          "case",
+          ["boolean", ["get", "clustered"], false],
+          "#A3BE8C",
+          "#88C0D0"
+        ],
+        "circle-radius": [
+          "case",
+          ["boolean", ["get", "clustered"], false],
+          8,
+          5
+        ]
+      }
+    },
+    {
+      "id": "meteorite_label",
+      "type": "symbol",
+      "source": "tiles",
+      "source-layer": "meteorites",
+      "layout": {
+        "text-field": [
+          "number-format",
+          ["get", "point_count"],
+          { "min-fraction-digits": 0, "max-fraction-digits": 0 }
+        ],
+        "text-font": ["Open Sans Bold"],
+        "text-size": 10
+      },
+      "paint": {
+        "text-color": "#2E3440"
+      }
+    }
+  ]
+}

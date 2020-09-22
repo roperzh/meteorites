@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+
+    <title>Meteorite landings on Planet Earth | Demo</title>
+  </head>
+  <body>
+    <div class="intro container">
+      <h1>Meteorite landings on Planet Earth</h1>
+      <p>
+        This is an example project demonstrating how to render a map using
+        static vector tiles and mapbox-gl.js.
+      </p>
+      <p>
+        The <a href="#">source code</a> is available online, and there's also a
+        <a href="https://www.monades.dev/static-vector-tiles/">blog post</a>
+        explaining how everything is tied together.
+      </p>
+      <p>I hope you find this useful!</p>
+    </div>
+
+    <div id="map"></div>
+
+    <footer class="footer container">
+      <a href="https://www.monades.dev">More like this</a>
+      <a href="https://roperzh.com">About me</a>
+      <a href="https://github.com/roperzh">GitHub</a>
+      <a href="https://twitter.com/roperzh">Twitter</a>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var map = new mapboxgl.Map({
+          container: "map",
+          style: "assets/style.json",
+          zoom: 1,
+          maxZoom: 7,
+          center: [45, 25],
+          maxBounds: [
+            [-180, -85],
+            [180, 85],
+          ],
+          renderWorldCopies: false,
+          fadeDuration: 0,
+        });
+
+        var popup = new mapboxgl.Popup({
+          closeButton: false,
+          closeOnClick: false,
+        });
+        map.on("mouseenter", "meteorites", function (e) {
+          var feature = e.features[0];
+          if (!feature || feature.properties.clustered) {
+            return;
+          }
+
+          map.getCanvas().style.cursor = "pointer";
+
+          var coordinates = feature.geometry.coordinates.slice();
+          popup
+            .setLngLat(coordinates)
+            .setHTML(
+              `
+            <strong>${feature.properties.name}</strong><br />
+            <i>Mass: </i>${feature.properties.mass}g<br />
+            <i>Class: </i>${feature.properties.recclass}
+          `
+            )
+            .addTo(map);
+        });
+
+        map.on("mouseleave", "meteorites", function () {
+          map.getCanvas().style.cursor = "";
+          popup.remove();
+        });
+
+        // inspect a cluster on click
+        map.on("click", "meteorite_label", function (e) {
+          var features = map.queryRenderedFeatures(e.point, {
+            layers: ["meteorites"],
+          });
+
+          map.easeTo({
+            center: features[0].geometry.coordinates,
+            zoom: map.getZoom() + 1,
+          });
+        });
+
+        map.on("mouseenter", "meteorite_label", function () {
+          map.getCanvas().style.cursor = "pointer";
+        });
+        map.on("mouseleave", "meteorite_label", function () {
+          map.getCanvas().style.cursor = "";
+        });
+      });
+    </script>
+
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+        background: #434c5e;
+        color: #d8dee9;
+        font-family: "Lucida Console", Monaco, monospace;
+      }
+
+      a {
+        color: #88c0d0;
+      }
+
+      h1 {
+        margin-bottom: 35px;
+        color: #88c0d0;
+      }
+
+      .container {
+        padding: 20px;
+        max-width: 860px;
+        margin: 0 auto;
+      }
+
+      #map {
+        width: 100vw;
+        height: 500px;
+      }
+
+      .intro {
+        margin: 30px auto 50px;
+      }
+
+      .footer {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 50px;
+      }
+
+      .mapboxgl-popup {
+        color: #2e3440;
+      }
+
+      @media screen and (max-width: 860px) {
+        .intro {
+          margin-top: 0;
+        }
+
+        #map {
+          height: 400px;
+        }
+
+        .footer {
+          text-align: center;
+          flex-direction: column;
+        }
+
+        .footer a {
+          margin-bottom: 10px;
+        }
+      }
+    </style>
+  </body>
+</html>

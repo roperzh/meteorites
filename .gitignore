@@ -1,0 +1,6 @@
+artifacts/*
+!artifacts/Makefile
+!artifacts/*.js
+tiles/*
+.DS_Store
+.netlify

@@ -1,0 +1,3 @@
+/tiles/:zoom/:x/*
+  Content-Type: application/octet-stream
+  Content-Encoding: gzip
